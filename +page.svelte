@@ -3,8 +3,9 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
+
 <div class="text-column">
-	<h1 class='Branco'>Lista de Java</h1>
+	<h1 class='Laranja'>Lista de Javascript</h1>
 
 	<p class='Branco'>
 		1. Número é primo: <br>
@@ -46,7 +47,9 @@
 	.Branco{
 		color:white;
 	}
-
+	.Laranja{
+		color:#fa6400;
+	}
 	.button-5 {
   align-items: center;
   background-clip: padding-box;
