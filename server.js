@@ -5,9 +5,7 @@ var fs = require("fs");
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-var body = req.body;
-console.log(body);
-res.send('via post');
+
 
 function soma (a , b){
    return a + b;
@@ -30,6 +28,8 @@ app.post('/api/post-example' , (req, res) => {
  }
 )
 
+
+
 app.get('/listUsers', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
       console.log( data );
@@ -39,7 +39,9 @@ app.get('/listUsers', function (req, res) {
 
 app.get('/soma', function (req ,res){
    var body = req.body;
+
    var resultado = soma(body.a, body.b);
+
    res.send(`O resultado da soma de ${body.a} e ${body.b} é ${resultado}`);
 })
 
