@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var fs = require("fs");
+const axios = require('axios');
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -19,23 +20,17 @@ function multiplicar ( a , b ){
    return a * b;
 }
 
+function dividir ( a , b ){
+   return a / b;
+}
+
 app.use(express.json());
 
-app.post('/api/post-example' , (req, res) => {
-   const data = req.body;
-   console.log('Dados recebidos:', data);
-   res.send('Requisição POST bem-sucedida!');
- }
-)
 
 
 
-app.get('/listUsers', function (req, res) {
-   fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-      console.log( data );
-      res.end( data );
-   });
-})
+
+
 
 app.get('/soma', function (req ,res){
    var body = req.body;
@@ -45,39 +40,43 @@ app.get('/soma', function (req ,res){
    res.send(`O resultado da soma de ${body.a} e ${body.b} é ${resultado}`);
 })
 
-app.get('/subtracao/:valorA/:valorB', function (req ,res){
-   const valorA = parseFloat(req.params.valorA);
-   const valorB = parseFloat(req.params.valorB);
-   if(isNaN(valorA) || isNaN(valorB)){
-      res.send("Valores Invalidos");
-   } else {
-      res.send("Valor da subtracao A - B é : "+ subtração(valorA,valorB));
-   }
+app.get('/subtracao', function (req ,res){
+   var body = req.body;
+
+   var resultado = subtração(body.a, body.b);
+
+   res.send(`O resultado da subtração de ${body.a} e ${body.b} é ${resultado}`);
 })
 
-app.get('/multiplica/:valorA/:valorB', function (req ,res){
-   const valorA = parseFloat(req.params.valorA);
-   const valorB = parseFloat(req.params.valorB);
-   if(isNaN(valorA) || isNaN(valorB)){
-      res.send("Valores Invalidos");
-   } else {
-      res.send("Valor da subtracao A * B é : "+ multiplicar(valorA,valorB));
-   }
+app.get('/multiplica', function (req ,res){
+   var body = req.body;
+
+   var resultado = multiplicar(body.a, body.b);
+
+   res.send(`O resultado da multiplicação de ${body.a} e ${body.b} é ${resultado}`);
 })
 
+app.get('/dividir', function (req ,res){
+   var body = req.body;
 
+   var resultado = dividir(body.a, body.b);
 
-app.get('/listUser/:id', function (req, res) {
-    // First read existing users.
-    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-       var users = JSON.parse( data );
-       var user = users["user" + req.params.id] 
-       console.log( user );
-       res.end( JSON.stringify(user));
-    });
- })
+   res.send(`O resultado da multiplicação de ${body.a} e ${body.b} é ${resultado}`);
+})
 
-var server = app.listen(8081, function () {
+// MANDANDO UM REQUEST VIAS AXIOS
+
+axios.get('http://localhost:3000/soma', { data: { a: 5, b: 3 } })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+
+axios.get('http://localhost:3000/subtracao' , { data: { a: 5, b: 3 } })
+.then(response => console.log(response.data))
+.catch(error => console.error(error));
+
+// PORTA DO BACK -> 3000
+
+var server = app.listen(3000, function () {
    var host = server.address().address
    var port = server.address().port
    console.log("Example app listening at http://%s:%s", host, port)
